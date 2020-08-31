@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Числа фибоначчи{% endblock %}</h1>
+    <form action="" method="post">
+        <p>
+            <hr>
+            <label for="x">Введите число х </label>
+            <input type="int" name="x">
+            <hr>
+            <p>Число фибоначчи для введенного вами числа равно: {{ variable }}</p>
+        </p>
+    </form>
+{% endblock %}
