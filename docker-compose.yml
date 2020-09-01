@@ -1,0 +1,46 @@
+version: "3.2"
+services:
+
+    app:
+        container_name: app
+        image: app
+        build:
+            context: .
+            dockerfile: Dockerfile-app
+        ports:
+            - "5000:5000"
+
+    redis:
+        container_name: redis
+        image: "redis:alpine"
+        command: redis-server
+        ports:
+            - "6379:6379"
+        volumes:
+            - /tmp/redis-data:/var/lib/redis
+            - /tmp/redis.conf:/usr/local/etc/redis/redis.conf
+        environment:
+            - REDIS_REPLICATION_MODE=master
+    
+    rq-worker:
+        container_name: rq-worker
+        image: rq-worker
+        build:
+            context: .
+            dockerfile: Dockerfile-rqworker
+        command: rq worker -u redis://redis
+
+    postgres:
+        container_name: postgres
+        image: 'postgres:latest'
+        ports:
+            - 5432:5432/tcp 
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+        environment:
+            - POSTGRES_USER=ctm
+            - POSTGRES_PASSWORD=ctm
+
+    volumes:
+        postgres_data:
+            driver: local

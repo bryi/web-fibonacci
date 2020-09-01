@@ -1,0 +1,2 @@
+FROM app
+CMD rq worker -u redis://redis

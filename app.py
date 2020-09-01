@@ -28,6 +28,8 @@ POSTGRES_URL = get_env_variable("POSTGRES_URL")
 POSTGRES_USER = get_env_variable("POSTGRES_USER")
 POSTGRES_PW = get_env_variable("POSTGRES_PW")
 POSTGRES_DB = get_env_variable("POSTGRES_DB")
+REDIS_SERVER = get_env_variable("REDIS_SERVER")
+REDIS_Q = get_env_variable("REDIS_Q")
 
 app = Flask(__name__)
 DB_URL = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
@@ -36,8 +38,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation warning
 app.config['DEBUG'] = True
 
-redis_server = redis.Redis("localhost")
-q = Queue(connection=redis_server)
+redis_server = redis.Redis(REDIS_SERVER)
+redis_q = redis.Redis(REDIS_Q)
+q = Queue(connection=redis_q)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
