@@ -29,18 +29,3 @@ services:
             context: .
             dockerfile: Dockerfile-rqworker
         command: rq worker -u redis://redis
-
-    postgres:
-        container_name: postgres
-        image: 'postgres:latest'
-        ports:
-            - 5432:5432/tcp 
-        volumes:
-            - postgres_data:/var/lib/postgresql/data/
-        environment:
-            - POSTGRES_USER=ctm
-            - POSTGRES_PASSWORD=ctm
-
-    volumes:
-        postgres_data:
-            driver: local

@@ -39,7 +39,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation w
 app.config['DEBUG'] = True
 
 redis_server = redis.Redis(REDIS_SERVER)
-redis_q = redis.Redis(REDIS_Q)
+redis_q = redis.Redis(REDIS_SERVER)
 q = Queue(connection=redis_q)
 
 db = SQLAlchemy(app)
@@ -57,16 +57,15 @@ class fibo_db(db.Model):
         self.result = result
 
 @app.route("/", methods=['post', 'get'])
-def index():
+def send_fibo():
     x = 0
-    if request.method == 'POST':
-	    x = int(request.form.get('x'))  # запрос к данным формы
     try:
+        x = int(request.args['x'])
         result = q.enqueue(fibo, x, result_ttl=60*60*24)
         sleep(5)
         new_fibo = fibo_db(request=x,result=int(result.result))
         db.session.add(new_fibo)
         db.session.commit()
-        return render_template('index.html', variable=result.result)
+        return str(result.result)
     except:
         pass
