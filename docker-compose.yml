@@ -1,14 +1,31 @@
 version: "3.2"
 services:
 
-    app:
-        container_name: app
-        image: app
+    api:
+        container_name: api
+        image: api
         build:
             context: .
-            dockerfile: Dockerfile-app
+        environment:
+            - PATH=/root/.local/bin:$PATH
+            - FLASK_APP=api.py
         ports:
             - "5000:5000"
+        command: flask run --host=0.0.0.0
+          
+    frontend:
+        container_name: frontend
+        image: frontend
+        build:
+            context: .
+        depends_on:
+            - api
+        environment:
+            - PATH=/root/.local/bin:$PATH
+            - FLASK_APP=flask_frontend.py 
+        ports:
+            - "5001:5001"
+        command: flask run --port=5001 --host=0.0.0.0
 
     redis:
         container_name: redis
@@ -24,8 +41,7 @@ services:
     
     rq-worker:
         container_name: rq-worker
-        image: rq-worker
-        build:
-            context: .
-            dockerfile: Dockerfile-rqworker
-        command: rq worker -u redis://redis
+        image: api
+        environment:
+            - PATH=/root/.local/bin:$PATH
+        command: rq worker --url redis://redis:6379

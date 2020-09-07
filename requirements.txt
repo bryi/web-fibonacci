@@ -5,3 +5,4 @@ Flask-SQLAlchemy==2.4.4
 rq==1.5.1
 python-dotenv==0.14.0
 psycopg2==2.8.5
+requests==2.24.0

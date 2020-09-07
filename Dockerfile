@@ -20,8 +20,3 @@ COPY --from=compile-image /root/.local /root/.local
 WORKDIR app/
 
 COPY . .
-
-ENV PATH=/root/.local/bin:$PATH
-ENV FLASK_APP=app.py
-
-CMD ["flask", "run", "--host", "0.0.0.0"]
