@@ -1,0 +1,19 @@
+upstream frontend {
+    server frontend:5001;
+}
+
+upstream api {
+    server api:5000;
+}
+
+server {
+    listen 80;
+    server_name 10.0.0.135;
+    location / {
+        proxy_pass http://frontend;
+    }
+    location /api {
+        rewrite /api/(.*) /$1 break;
+        proxy_pass http://api;
+    }
+}
