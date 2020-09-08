@@ -11,13 +11,11 @@ services:
             - FLASK_APP=api.py
         ports:
             - "5000:5000"
-        command: flask run --host=0.0.0.0
+        entrypoint: ./entrypoint.sh
           
     frontend:
         container_name: frontend
-        image: frontend
-        build:
-            context: .
+        image: api
         depends_on:
             - api
         environment:
@@ -26,22 +24,10 @@ services:
         ports:
             - "5001:5001"
         command: flask run --port=5001 --host=0.0.0.0
-
-    redis:
-        container_name: redis
-        image: "redis:alpine"
-        command: redis-server
-        ports:
-            - "6379:6379"
-        volumes:
-            - /tmp/redis-data:/var/lib/redis
-            - /tmp/redis.conf:/usr/local/etc/redis/redis.conf
-        environment:
-            - REDIS_REPLICATION_MODE=master
     
     rq-worker:
         container_name: rq-worker
         image: api
         environment:
             - PATH=/root/.local/bin:$PATH
-        command: rq worker --url redis://redis:6379
+        command: rq worker --url redis://10.0.0.25:6379

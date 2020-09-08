@@ -37,8 +37,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation warning
 app.config['DEBUG'] = True
 
-redis_server = redis.Redis(host=REDIS_SERVER, port=6379)
-q = Queue(connection=redis_server)
+q = Queue(connection=redis.Redis(host=REDIS_SERVER, port=6379))
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -62,8 +61,11 @@ def send_fibo():
         result = q.enqueue(fibo, x, result_ttl=60*60*24)
         sleep(5)
         new_fibo = fibo_db(request=x,result=int(result.result))
-        db.session.add(new_fibo)
-        db.session.commit()
+        try:
+            db.session.add(new_fibo)
+            db.session.commit()
+        except:
+            print('Cannot save result to database!')
         return str(result.result)
     except:
         pass
