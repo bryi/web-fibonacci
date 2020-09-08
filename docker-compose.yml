@@ -3,7 +3,7 @@ services:
 
     api:
         container_name: api
-        image: api
+        image: bryi/api
         build:
             context: .
         depends_on:
@@ -50,7 +50,7 @@ services:
           
     frontend:
         container_name: frontend
-        image: api
+        image: bryi/api
         depends_on:
             - api
         environment:
@@ -62,7 +62,7 @@ services:
     
     rq-worker:
         container_name: rq-worker
-        image: api
+        image: bryi/api
         environment:
             - PATH=/home/worker/.local/bin:$PATH
         command: rq worker --url redis://redis:6379
