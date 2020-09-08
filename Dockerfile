@@ -13,12 +13,18 @@ RUN pip3 install --user -r requirements.txt
 
 FROM python:3.8-slim AS build-image
 
-RUN mkdir app && apt-get update && apt-get install -y libpq5 libpq-dev postgresql-client && apt-get clean autoclean \
+RUN useradd -ms /bin/bash worker
+
+RUN apt-get update && apt-get install -y libpq5 libpq-dev postgresql-client && apt-get clean autoclean \
 && apt-get autoremove --yes \
 && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
-COPY --from=compile-image /root/.local /root/.local
+USER worker
 
-WORKDIR app/
+COPY --chown=worker:worker --from=compile-image /root/.local /home/worker/.local
 
-COPY . .
+RUN mkdir /home/worker/app
+
+WORKDIR /home/worker/app/
+
+COPY --chown=worker:worker . .

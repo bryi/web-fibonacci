@@ -10,7 +10,7 @@ services:
             - postgres
             - redis
         environment:
-            - PATH=/root/.local/bin:$PATH
+            - PATH=/home/worker/.local/bin:$PATH
             - FLASK_APP=api.py
         ports:
             - "5000:5000"
@@ -34,7 +34,7 @@ services:
         volumes:
             - ./nginx:/etc/nginx/templates
         ports:
-            - "8080:80"
+            - "80:80"
     
     redis:
         container_name: redis
@@ -54,7 +54,7 @@ services:
         depends_on:
             - api
         environment:
-            - PATH=/root/.local/bin:$PATH
+            - PATH=/home/worker/.local/bin:$PATH
             - FLASK_APP=flask_frontend.py 
         ports:
             - "5001:5001"
@@ -64,7 +64,7 @@ services:
         container_name: rq-worker
         image: api
         environment:
-            - PATH=/root/.local/bin:$PATH
+            - PATH=/home/worker/.local/bin:$PATH
         command: rq worker --url redis://redis:6379
 
 volumes:
