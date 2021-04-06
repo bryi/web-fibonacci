@@ -36,7 +36,7 @@ DB_URL = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USE
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation warning
-app.config['DEBUG'] = True
+app.config['DEBUG'] = False
 
 q = Queue(connection=redis.Redis(host=REDIS_SERVER, port=6379))
 
@@ -62,8 +62,8 @@ def send_fibo():
         result = q.enqueue(fibo, x, result_ttl=60*60*24)
         while True:
             if result.result is not None:
-                new_fibo = fibo_db(request=x,result=int(result.result))
                 break
+        new_fibo = fibo_db(request=x,result=int(result.result))
         try:
             db.session.add(new_fibo)
             db.session.commit()
