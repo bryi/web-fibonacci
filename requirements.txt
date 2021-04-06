@@ -7,4 +7,5 @@ python-dotenv==0.14.0
 psycopg2==2.8.5
 requests==2.24.0
 psycopg2-binary
+sqlalchemy < 1.4.0
 sqlalchemy_utils

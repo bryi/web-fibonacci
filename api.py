@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
 from dotenv import load_dotenv
+import sys
 
 load_dotenv()
 
@@ -59,13 +60,15 @@ def send_fibo():
     try:
         x = int(request.args['x'])
         result = q.enqueue(fibo, x, result_ttl=60*60*24)
-        sleep(5)
-        new_fibo = fibo_db(request=x,result=int(result.result))
+        while True:
+            if result.result is not None:
+                new_fibo = fibo_db(request=x,result=int(result.result))
+                break
         try:
             db.session.add(new_fibo)
             db.session.commit()
         except:
-            print('Cannot save result to database!')
+            print('Cannot save result to database!', file=sys.stderr)
         return str(result.result)
     except:
         pass

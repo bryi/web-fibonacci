@@ -8,7 +8,7 @@ upstream api {
 
 server {
     listen 80;
-    server_name 10.0.0.135;
+    server_name 10.0.0.128;
     location / {
         proxy_pass http://frontend;
     }
