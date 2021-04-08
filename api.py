@@ -51,10 +51,12 @@ class fibo_db(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     request = db.Column(db.Integer())
     result = db.Column(db.Integer())
+    job_id = db.Column(db.String())
 
-    def __init__(self, request, result):
+    def __init__(self, request, result, job_id):
         self.request = request
         self.result = result
+        self.job_id = job_id
 
 results_dict = {}
 temp_dict = {}
@@ -68,17 +70,18 @@ def send_fibo():
         res = int(res_call.result)
     except:
         result = q.enqueue(fibo, x, result_ttl=60*60*24)
+        job_id = result.id
         while True:
             if result.result is not None:
                 break
         res = int(result.result)
         temp_dict[x]=result.id
         results_dict.update(temp_dict)
-    
-    new_fibo = fibo_db(request=x,result=res)
-    try:
-        db.session.add(new_fibo)
-        db.session.commit()
-    except:
-        print('Cannot save result to database!', file=sys.stderr)
+        new_fibo = fibo_db(request=x,result=res,job_id=str(job_id))
+        try:
+            db.session.add(new_fibo)
+            db.session.commit()
+        except:
+            print('Cannot save result to database!', file=sys.stderr)
+
     return str(res)

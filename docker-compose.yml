@@ -64,6 +64,8 @@ services:
     rq-worker:
         container_name: rq-worker
         image: bryi/api
+        depends_on:
+            - redis
         environment:
             - PATH=/home/worker/.local/bin:$PATH
         command: rq worker --url redis://redis:6379
