@@ -1,6 +1,7 @@
 from flask import Flask, request
 import redis
 from rq import Queue
+from rq.job import Job
 from time import sleep
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -38,7 +39,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation warning
 app.config['DEBUG'] = False
 
-q = Queue(connection=redis.Redis(host=REDIS_SERVER, port=6379))
+redis_conn = redis.Redis(host=REDIS_SERVER, port=6379)
+q = Queue(connection=redis_conn)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -54,21 +56,29 @@ class fibo_db(db.Model):
         self.request = request
         self.result = result
 
+results_dict = {}
+temp_dict = {}
 @app.route("/", methods=['post', 'get'])
 def send_fibo():
     x = 0
     try:
         x = int(request.args['x'])
+        job_id = results_dict[x]
+        res_call = Job.fetch(f'{job_id}', connection=redis_conn)
+        res = int(res_call.result)
+    except:
         result = q.enqueue(fibo, x, result_ttl=60*60*24)
         while True:
             if result.result is not None:
                 break
-        new_fibo = fibo_db(request=x,result=int(result.result))
-        try:
-            db.session.add(new_fibo)
-            db.session.commit()
-        except:
-            print('Cannot save result to database!', file=sys.stderr)
-        return str(result.result)
+        res = int(result.result)
+        temp_dict[x]=result.id
+        results_dict.update(temp_dict)
+    
+    new_fibo = fibo_db(request=x,result=res)
+    try:
+        db.session.add(new_fibo)
+        db.session.commit()
     except:
-        pass
+        print('Cannot save result to database!', file=sys.stderr)
+    return str(res)
