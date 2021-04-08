@@ -69,7 +69,7 @@ def send_fibo():
         res_call = Job.fetch(f'{job_id}', connection=redis_conn)
         res = int(res_call.result)
     except:
-        result = q.enqueue(fibo, x, result_ttl=60*60*24)
+        result = q.enqueue(fibo, x, result_ttl=10)
         job_id = result.id
         while True:
             if result.result is not None:

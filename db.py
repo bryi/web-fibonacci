@@ -3,5 +3,6 @@ from api import DB_URL, db
 
 if not database_exists(DB_URL):
     create_database(DB_URL)
-
+#elif database_exists(DB_URL):
+#    drop_database(DB_URL)
 db.create_all()

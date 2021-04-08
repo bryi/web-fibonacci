@@ -44,8 +44,8 @@ services:
         ports:
             - "6379:6379"
         volumes:
-            - /tmp/redis-data:/var/lib/redis
-            - /tmp/redis.conf:/usr/local/etc/redis/redis.conf
+            - redis_data:/data
+            #- /tmp/redis.conf:/usr/local/etc/redis/redis.conf
         environment:
             - REDIS_REPLICATION_MODE=master
           
@@ -72,5 +72,7 @@ services:
 
 volumes:
     postgres_data:
+        driver: local
+    redis_data:
         driver: local
     
