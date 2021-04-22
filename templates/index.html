@@ -9,6 +9,20 @@
             <input type="int" name="x">
             <hr>
             <p>Число фибоначчи для введенного вами числа равно: {{ variable }}</p>
+            <hr>
+            <p>Уже введенные числа:</p>
+            <hr>
+            <p>{{ variable2 }}</p>
+            <hr>
+            <p>Посчитанные значения чисел:</p>
+            <hr>
+            <table>
+                {% for key, value in variable3.items() %}
+                   <tr>
+                        <td> Для числа {{ key }} полученное значение равно {{ value }} </td>
+                   </tr>
+                {% endfor %}
+            </table>
         </p>
     </form>
 {% endblock %}

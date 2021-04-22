@@ -69,7 +69,7 @@ services:
         environment:
             - PATH=/home/worker/.local/bin:$PATH
         command: rq worker --url redis://redis:6379
-
+    
 volumes:
     postgres_data:
         driver: local
