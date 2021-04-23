@@ -11,6 +11,11 @@ services:
             - redis
         environment:
             - PATH=/home/worker/.local/bin:$PATH
+            - POSTGRES_URL=postgres:5432
+            - POSTGRES_USER=ctm
+            - POSTGRES_PW=ctm
+            - POSTGRES_DB=app_redis
+            - REDIS_SERVER=redis
             - FLASK_APP=api.py
         expose:
             - "5000"

@@ -6,10 +6,7 @@ from time import sleep
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
-from dotenv import load_dotenv
 import sys
-
-load_dotenv()
 
 def fibo(x: int):
     if x == 0:
@@ -21,7 +18,7 @@ def fibo(x: int):
 
 def get_env_variable(name):
     try:
-        return os.environ[name]
+        return os.getenv(name)
     except KeyError:
         message = "Expected environment variable '{}' not set.".format(name)
         raise Exception(message)
