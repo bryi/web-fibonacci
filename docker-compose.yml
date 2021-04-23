@@ -12,7 +12,7 @@ services:
         environment:
             - PATH=/home/worker/.local/bin:$PATH
             - FLASK_APP=api.py
-        ports:
+        expose:
             - "5000"
         entrypoint: ./entrypoint.sh
 
@@ -20,7 +20,7 @@ services:
         container_name: postgres
         image: 'postgres:12'
         restart: always
-        ports:
+        expose:
             - 5432/tcp 
         volumes:
             - postgres_data:/var/lib/postgresql/data/
@@ -41,7 +41,7 @@ services:
         container_name: redis
         image: "redis:alpine"
         command: redis-server
-        ports:
+        expose:
             - "6379"
         volumes:
             - redis_data:/data
@@ -59,7 +59,7 @@ services:
         environment:
             - PATH=/home/worker/.local/bin:$PATH
             - FLASK_APP=flask_frontend.py 
-        ports:
+        expose:
             - "5001"
         command: flask run --port=5001 --host=0.0.0.0
     
