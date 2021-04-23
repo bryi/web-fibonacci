@@ -17,6 +17,8 @@ services:
             - POSTGRES_DB=app_redis
             - REDIS_SERVER=redis
             - FLASK_APP=api.py
+        volumes: 
+            - ./api:/home/worker/app
         expose:
             - "5000"
         entrypoint: ./entrypoint.sh
@@ -63,7 +65,9 @@ services:
             - api
         environment:
             - PATH=/home/worker/.local/bin:$PATH
-            - FLASK_APP=flask_frontend.py 
+            - FLASK_APP=flask_frontend.py
+        volumes: 
+            - ./web:/home/worker/app
         expose:
             - "5001"
         command: uwsgi --http 0.0.0.0:5001 --module flask_frontend:app
@@ -75,6 +79,8 @@ services:
             - redis
         environment:
             - PATH=/home/worker/.local/bin:$PATH
+        volumes: 
+            - ./api:/home/worker/app
         command: rq worker --url redis://redis:6379
     
 volumes:
