@@ -13,7 +13,7 @@ services:
             - PATH=/home/worker/.local/bin:$PATH
             - FLASK_APP=api.py
         ports:
-            - "5000:5000"
+            - "5000"
         entrypoint: ./entrypoint.sh
 
     postgres:
@@ -21,7 +21,7 @@ services:
         image: 'postgres:12'
         restart: always
         ports:
-            - 5432:5432/tcp 
+            - 5432/tcp 
         volumes:
             - postgres_data:/var/lib/postgresql/data/
         environment:
@@ -42,7 +42,7 @@ services:
         image: "redis:alpine"
         command: redis-server
         ports:
-            - "6379:6379"
+            - "6379"
         volumes:
             - redis_data:/data
             #- /tmp/redis.conf:/usr/local/etc/redis/redis.conf
@@ -60,7 +60,7 @@ services:
             - PATH=/home/worker/.local/bin:$PATH
             - FLASK_APP=flask_frontend.py 
         ports:
-            - "5001:5001"
+            - "5001"
         command: flask run --port=5001 --host=0.0.0.0
     
     rq-worker:
