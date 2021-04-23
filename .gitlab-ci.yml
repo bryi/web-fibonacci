@@ -1,0 +1,33 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  DOCKER_USER: bryi
+
+.base_build: &base_build
+  stage: build
+  only:
+    - master
+  tags: 
+    - aws
+    - docker
+    - python
+  script: 
+    - docker build -t $DOCKER_USER/api:latest api/
+    - docker push $DOCKER_USER/api:latest
+    - docker build -t $DOCKER_USER/frontend:latest web/
+    - docker push $DOCKER_USER/frontend:latest
+
+.base_deploy: &base_deploy
+  <<: *base_build
+  stage: deploy
+  script:
+    - eb init -p docker $CI_PROJECT_NAME
+    - eb create $CI_PROJECT_NAME
+
+build:
+  <<: *base_build
+
+deploy:
+  <<: *base_deploy
