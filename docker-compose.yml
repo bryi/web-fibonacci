@@ -5,7 +5,7 @@ services:
         container_name: api
         image: bryi/api
         build:
-            context: .
+            context: api/
         depends_on:
             - postgres
             - redis
@@ -51,7 +51,9 @@ services:
           
     frontend:
         container_name: frontend
-        image: bryi/api
+        image: bryi/frontend
+        build:
+            context: web/
         depends_on:
             - api
         environment:
