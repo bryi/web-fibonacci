@@ -26,3 +26,5 @@ COPY --chown=worker:worker --from=compile-image /root/.local /home/worker/.local
 RUN mkdir /home/worker/app
 
 WORKDIR /home/worker/app/
+
+COPY --chown=worker:worker . .
