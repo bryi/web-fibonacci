@@ -29,4 +29,6 @@ WORKDIR /home/worker/app/
 
 COPY --chown=worker:worker . .
 
+EXPOSE 5000
+
 ENTRYPOINT [ "./entrypoint.sh" ]

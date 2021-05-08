@@ -29,4 +29,6 @@ WORKDIR /home/worker/app/
 
 COPY --chown=worker:worker . .
 
+EXPOSE 5001
+
 CMD uwsgi --http 0.0.0.0:5001 --module flask_frontend:app
