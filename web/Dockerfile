@@ -28,3 +28,5 @@ RUN mkdir /home/worker/app
 WORKDIR /home/worker/app/
 
 COPY --chown=worker:worker . .
+
+CMD uwsgi --http 0.0.0.0:5001 --module flask_frontend:app

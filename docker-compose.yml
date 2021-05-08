@@ -1,93 +1,34 @@
-version: "3.2"
+version: "2.4"
 services:
 
     api:
-        container_name: api
         image: bryi/api
-        build:
-            context: api/
-        depends_on:
-            - postgres
-            - redis
+        mem_limit: 128m
         environment:
-            - PATH=/home/worker/.local/bin:$PATH
-            - POSTGRES_URL=postgres:5432
-            - POSTGRES_USER=ctm
-            - POSTGRES_PW=ctm
-            - POSTGRES_DB=app_redis
-            - REDIS_SERVER=redis
-            - FLASK_APP=api.py
-        volumes: 
-            - ./api:/home/worker/app
-        expose:
-            - "5000"
-        entrypoint: ./entrypoint.sh
-
-    postgres:
-        container_name: postgres
-        image: 'postgres:12'
-        restart: always
-        expose:
-            - 5432/tcp 
-        volumes:
-            - postgres_data:/var/lib/postgresql/data/
-        environment:
-            - POSTGRES_USER=ctm
-            - POSTGRES_PASSWORD=ctm
-
-    nginx:
-        container_name: nginx
-        image: nginx
-        restart: always
-        volumes:
-            - ./nginx:/etc/nginx/templates
+            PATH: /home/worker/.local/bin:$PATH
+            POSTGRES_URL: database-1.cyy2awpa56jv.eu-central-1.rds.amazonaws.com:5432
+            POSTGRES_USER: ctm
+            POSTGRES_PW: ctmctmctm
+            POSTGRES_DB: app_redis
+            REDIS_SERVER: redis.qtpczm.ng.0001.euc1.cache.amazonaws.com
+            FLASK_APP: api.py
         ports:
-            - "80:80"
-    
-    redis:
-        container_name: redis
-        image: "redis:alpine"
-        command: redis-server
-        depends_on:
-            - postgres
-        expose:
-            - "6379"
-        volumes:
-            - redis_data:/data
-            #- /tmp/redis.conf:/usr/local/etc/redis/redis.conf
-        environment:
-            - REDIS_REPLICATION_MODE=master
+            - 5000:5000
           
     frontend:
-        container_name: frontend
         image: bryi/frontend
-        build:
-            context: web/
-        depends_on:
+        mem_limit: 128m
+        links:
             - api
         environment:
-            - PATH=/home/worker/.local/bin:$PATH
-            - FLASK_APP=flask_frontend.py
-        volumes: 
-            - ./web:/home/worker/app
-        expose:
-            - "5001"
-        command: uwsgi --http 0.0.0.0:5001 --module flask_frontend:app
+            PATH: /home/worker/.local/bin:$PATH
+            FLASK_APP: flask_frontend.py
+        ports:
+            - 5001:5001
     
     rq-worker:
-        container_name: rq-worker
-        image: bryi/api
-        depends_on:
-            - redis
+        image: bryi/worker
+        mem_limit: 128m
         environment:
-            - PATH=/home/worker/.local/bin:$PATH
-        volumes: 
-            - ./api:/home/worker/app
-        command: rq worker --url redis://redis:6379
-    
-volumes:
-    postgres_data:
-        driver: local
-    redis_data:
-        driver: local
-    
+            PATH: /home/worker/.local/bin:$PATH
+            REDIS_SERVER: redis.qtpczm.ng.0001.euc1.cache.amazonaws.com

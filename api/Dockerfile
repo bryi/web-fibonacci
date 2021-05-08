@@ -28,3 +28,5 @@ RUN mkdir /home/worker/app
 WORKDIR /home/worker/app/
 
 COPY --chown=worker:worker . .
+
+ENTRYPOINT [ "./entrypoint.sh" ]

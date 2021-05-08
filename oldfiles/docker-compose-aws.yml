@@ -14,8 +14,6 @@ services:
             - POSTGRES_DB=app_redis
             - REDIS_SERVER=redis.qtpczm.ng.0001.euc1.cache.amazonaws.com
             - FLASK_APP=api.py
-        volumes: 
-            - ./api:/home/worker/app
         expose:
             - "5000"
         entrypoint: ./entrypoint.sh
@@ -30,17 +28,14 @@ services:
         environment:
             - PATH=/home/worker/.local/bin:$PATH
             - FLASK_APP=flask_frontend.py
-        volumes: 
-            - ./web:/home/worker/app
         ports:
             - "80:5001"
         command: uwsgi --http 0.0.0.0:5001 --module flask_frontend:app
     
     rq-worker:
         container_name: rq-worker
-        image: bryi/api
+        image: bryi/worker
         environment:
             - PATH=/home/worker/.local/bin:$PATH
-        volumes: 
-            - ./api:/home/worker/app
-        command: rq worker --url redis://redis.qtpczm.ng.0001.euc1.cache.amazonaws.com:6379
+            - REDIS_SERVER=redis.qtpczm.ng.0001.euc1.cache.amazonaws.com
+        command: rq worker --url redis://$REDIS_SERVER:6379

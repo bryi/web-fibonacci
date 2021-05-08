@@ -1,0 +1,92 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+      {
+        "name": "api",
+        "image": "bryi/api:latest",
+        "hostname": "api",
+        "environment": [
+          {
+            "name": "PATH",
+            "value": "/home/worker/.local/bin:$PATH"
+          },
+          {
+            "name": "POSTGRES_URL",
+            "value": "database-1.cyy2awpa56jv.eu-central-1.rds.amazonaws.com:5432"
+          },
+          {
+            "name": "POSTGRES_USER",
+            "value": "ctm"
+          },
+          {
+            "name": "POSTGRES_PW",
+            "value": "ctmctmctm"
+          },
+          {
+            "name": "POSTGRES_DB",
+            "value": "app_redis"
+          },
+          {
+            "name": "REDIS_SERVER",
+            "value": "redis.qtpczm.ng.0001.euc1.cache.amazonaws.com"
+          },
+          {
+            "name": "FLASK_APP",
+            "value": "api.py"
+          }
+        ],
+        "essential": true,
+        "memory": 128,
+        "portMappings": [
+            {
+              "containerPort": 5000
+            }
+          ]
+      },
+      {
+        "name": "web",
+        "image": "bryi/frontend:latest",
+        "links": [
+          "api"
+        ],
+        "environment": [
+          {
+            "name": "PATH",
+            "value": "/home/worker/.local/bin:$PATH"
+          },
+          {
+            "name": "FLASK_APP",
+            "value": "flask_frontend.py"
+          }
+        ],
+        "essential": false,
+        "memory": 128,
+        "hostname": "web",
+        "portMappings": [
+            {
+              "hostPort": 8080,
+              "containerPort": 5001
+            }
+          ]
+        },
+        {
+          "name": "worker",
+          "image": "bryi/worker:latest",
+          "environment": [
+            {
+              "name": "PATH",
+              "value": "/home/worker/.local/bin:$PATH"
+            },
+            {
+              "name": "REDIS_SERVER",
+              "value": "redis.qtpczm.ng.0001.euc1.cache.amazonaws.com"
+            }
+          ],
+          "essential": false,
+          "memory": 128,
+          "hostname": "worker"
+          }
+    ]
+}
+
+      

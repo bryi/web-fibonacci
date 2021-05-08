@@ -28,3 +28,5 @@ RUN mkdir /home/worker/app
 WORKDIR /home/worker/app/
 
 COPY --chown=worker:worker . .
+
+CMD rq worker --url redis://$REDIS_SERVER:6379
