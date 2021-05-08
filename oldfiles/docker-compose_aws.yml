@@ -12,8 +12,6 @@ services:
             POSTGRES_DB: app_redis
             REDIS_SERVER: redis.qtpczm.ng.0001.euc1.cache.amazonaws.com
             FLASK_APP: api.py
-        ports:
-            - 5000:5000
           
     frontend:
         image: bryi/frontend
@@ -23,8 +21,13 @@ services:
         environment:
             PATH: /home/worker/.local/bin:$PATH
             FLASK_APP: flask_frontend.py
+
+    nginx:
+        image: nginx
+        volumes:
+            - ./nginx:/etc/nginx/templates
         ports:
-            - 5001:5001
+            - "80:80"
     
     rq-worker:
         image: bryi/worker

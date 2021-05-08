@@ -36,12 +36,7 @@
           }
         ],
         "essential": true,
-        "memory": 128,
-        "portMappings": [
-            {
-              "containerPort": 5000
-            }
-          ]
+        "memory": 128
       },
       {
         "name": "web",
@@ -64,28 +59,28 @@
         "hostname": "web",
         "portMappings": [
             {
-              "hostPort": 8080,
+              "hostPort": 80,
               "containerPort": 5001
             }
           ]
-        },
-        {
-          "name": "worker",
-          "image": "bryi/worker:latest",
-          "environment": [
-            {
-              "name": "PATH",
-              "value": "/home/worker/.local/bin:$PATH"
-            },
-            {
-              "name": "REDIS_SERVER",
-              "value": "redis.qtpczm.ng.0001.euc1.cache.amazonaws.com"
-            }
-          ],
-          "essential": false,
-          "memory": 128,
-          "hostname": "worker"
+      },
+      {
+        "name": "worker",
+        "image": "bryi/worker:latest",
+        "environment": [
+          {
+            "name": "PATH",
+            "value": "/home/worker/.local/bin:$PATH"
+          },
+          {
+            "name": "REDIS_SERVER",
+            "value": "redis.qtpczm.ng.0001.euc1.cache.amazonaws.com"
           }
+        ],
+        "essential": false,
+        "memory": 128,
+        "hostname": "worker"
+      }
     ]
 }
 
