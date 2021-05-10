@@ -31,4 +31,7 @@ COPY --chown=worker:worker . .
 
 EXPOSE 5001
 
+ENV PATH=/home/worker/.local/bin:$PATH \
+    FLASK_APP=flask_frontend.py
+
 CMD uwsgi --http 0.0.0.0:5001 --module flask_frontend:app

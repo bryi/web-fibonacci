@@ -29,6 +29,9 @@ WORKDIR /home/worker/app/
 
 COPY --chown=worker:worker . .
 
+ENV PATH=/home/worker/.local/bin:$PATH \
+    FLASK_APP=api.py
+
 EXPOSE 5000
 
 ENTRYPOINT [ "./entrypoint.sh" ]
