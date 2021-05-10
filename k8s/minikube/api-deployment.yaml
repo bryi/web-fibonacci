@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: api
+  template:
+    metadata:
+      labels:
+        component: api
+    spec:
+      containers:
+        - name: api
+          image: bryi/api
+          ports:
+            - containerPort: 5000
+          env:
+          - name: POSTGRES_URL
+            value: "192.168.56.114:5432"
+          - name: POSTGRES_USER
+            value: "ctm"
+          - name: POSTGRES_PW
+            value: "ctm"
+          - name: POSTGRES_DB
+            value: "app_redis"
+          - name: REDIS_SERVER
+            value: "192.168.56.114"
+         

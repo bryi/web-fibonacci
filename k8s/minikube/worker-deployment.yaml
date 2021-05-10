@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: worker
+  template:
+    metadata:
+      labels:
+        component: worker
+    spec:
+      containers:
+        - name: worker
+          image: bryi/worker
+          env:
+          - name: PATH
+            value: "/home/worker/.local/bin:$PATH"
+          - name: REDIS_SERVER
+            value: "192.168.56.114"
+         
