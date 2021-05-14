@@ -23,7 +23,10 @@ spec:
           - name: POSTGRES_USER
             value: "ctm"
           - name: POSTGRES_PW
-            value: "ctm"
+            valueFrom:
+              secretKeyRef:
+                name: pgpass
+                key: POSTGRES_PW
           - name: POSTGRES_DB
             value: "app_redis"
           - name: REDIS_SERVER
