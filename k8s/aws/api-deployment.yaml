@@ -30,7 +30,7 @@ spec:
           - name: POSTGRES_URL
             value: "rds-eksworkshop.cmsyxompjlqg.us-east-1.rds.amazonaws.com:5432"
           - name: POSTGRES_USER
-            value: "ctm"
+            value: "eksworkshop"
           - name: POSTGRES_PW
             valueFrom:
               secretKeyRef:

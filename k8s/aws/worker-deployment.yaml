@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: worker
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      component: api
+      component: worker
   template:
     metadata:
       labels:
-        component: api
+        component: worker
     spec:
       affinity:
        nodeAffinity:
@@ -22,22 +22,11 @@ spec:
               values:
                 - "true"
       containers:
-        - name: api
-          image: bryi/api
-          ports:
-            - containerPort: 5000
+        - name: worker
+          image: bryi/worker
           env:
-          - name: POSTGRES_URL
-            value: "rds-eksworkshop.cmsyxompjlqg.us-east-1.rds.amazonaws.com:5432"
-          - name: POSTGRES_USER
-            value: "ctm"
-          - name: POSTGRES_PW
-            valueFrom:
-              secretKeyRef:
-                name: postgrespass
-                key: password
-          - name: POSTGRES_DB
-            value: "app_redis"
+          - name: PATH
+            value: "/home/worker/.local/bin:$PATH"
           - name: REDIS_SERVER
             value: "redis.ugjdtw.ng.0001.use1.cache.amazonaws.com"
          

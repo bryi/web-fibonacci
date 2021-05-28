@@ -4,8 +4,8 @@ services:
     api:
         container_name: api
         image: bryi/api
-        build:
-            context: api/
+        #build:
+        #    context: api/
         depends_on:
             - postgres
             - redis
@@ -47,8 +47,8 @@ services:
     frontend:
         container_name: frontend
         image: bryi/frontend
-        build:
-            context: web/
+        #build:
+        #    context: web/
         ports:
             - "80:5001"
         depends_on:
@@ -59,9 +59,9 @@ services:
     
     rq-worker:
         container_name: rq-worker
-        build:
-            context: api/
-            dockerfile: Dockerfile_worker
+        #build:
+        #    context: api/
+        #    dockerfile: Dockerfile_worker
         image: bryi/worker
         depends_on:
             - redis
