@@ -59,9 +59,9 @@ services:
     
     rq-worker:
         container_name: rq-worker
-        #build:
-        #    context: api/
-        #    dockerfile: Dockerfile_worker
+        build:
+            context: api/
+            dockerfile: Dockerfile_worker
         image: bryi/worker
         depends_on:
             - redis
