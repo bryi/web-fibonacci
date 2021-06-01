@@ -11,10 +11,8 @@ def index():
     try:
         a = requests.get('http://api:5000/?x={}'.format(x))
         dictin = requests.get('http://api:5000/dict')
-        result = int(a.content)
         di = dictin.json()
 
     except:
-        result = 0
         di = {}
-    return render_template('index.html', variable=result, variable3=di)
+    return render_template('index.html', variable3=di)
