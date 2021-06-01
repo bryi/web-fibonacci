@@ -5,7 +5,8 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      component: worker
+      component: web
   securityGroups:
     groupIds:
       - sg-0f207ef62d86d806e
+      - sg-070b67637ab9fbb92

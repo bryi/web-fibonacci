@@ -57,6 +57,7 @@ class fibo_db(db.Model):
 
 results_dict = {}
 temp_dict = {}
+di = {}
 @app.route("/", methods=['post', 'get'])
 def send_fibo():
     x = 0
@@ -72,6 +73,7 @@ def send_fibo():
             if result.result is not None:
                 break
         res = int(result.result)
+        di[x] = res
         temp_dict[x]=result.id
         results_dict.update(temp_dict)
         new_fibo = fibo_db(request=x,result=res,job_id=str(job_id))
@@ -80,5 +82,8 @@ def send_fibo():
             db.session.commit()
         except:
             print('Cannot save result to database!', file=sys.stderr)
-
     return str(res)
+
+@app.route("/dict", methods=['post', 'get'])
+def send_dict():
+    return di

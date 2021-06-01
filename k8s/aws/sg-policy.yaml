@@ -8,4 +8,4 @@ spec:
       component: api
   securityGroups:
     groupIds:
-      - sg-07f9caceda0a4a6da
+      - sg-0f207ef62d86d806e
