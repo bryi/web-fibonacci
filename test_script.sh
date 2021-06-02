@@ -8,6 +8,6 @@ result=`curl -s localhost:5000/?x=$i`;
 echo $result;
 dict=`curl -s localhost:5000/dict`;
 echo $dict;
-sleep 3 
+sleep 1 
 done
 done

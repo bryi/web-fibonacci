@@ -80,7 +80,7 @@ def background(di):
 
 @app.route("/", methods=['post', 'get'])
 def send_fibo():
-    x = 0
+    #x = 0
     background(di)
     try:
         x = int(request.args['x'])

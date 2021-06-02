@@ -1,22 +1,48 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Числа фибоначчи{% endblock %}</h1>
-    <form action="" method="post">
-        <p>
-            <hr>
-            <label for="x">Введите число х    </label>
-            <input type="int" name="x">
-            <hr>
-            <p>Посчитанные значения чисел:</p>
-            <hr>
-            <table>
-                {% for key, value in variable3.items() %}
-                   <tr>
-                        <td> Для числа {{ key }} полученное значение равно {{ value }} </td>
-                   </tr>
-                {% endfor %}
-            </table>
-        </p>
-    </form>
+
+    <div class="row">
+
+        <div class="col-lg-6 col-md-10 col-12 d-flex flex-column justify-content-center align-items-center">
+            <div class="hero-text">
+
+                <p class="text-white" data-aos="fade-up" data-aos-delay="100"> Каждые 5 секунд страница обновляется автоматически.</p>
+
+                <form action="" method="post">
+                    <p>
+                        <br>
+                        <label for="x" class="text-white" data-aos="fade-up" data-aos-delay="100">Введите число </label>
+                        <input type="int" name="x">
+                        <br>
+                        <p class="text-white" data-aos="fade-up" data-aos-delay="100">Посчитанные значения чисел:</p>
+                        <table>
+                            {% for key, value in variable3.items() %}
+                                {% if value == "Запрос помещен в очередь" %}
+                                    <tr>
+                                            <td class="text-white" data-aos="fade-up" data-aos-delay="100"> Для числа <strong>{{ key }}</strong> {{ value }} </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                            <td class="text-white" data-aos="fade-up" data-aos-delay="100"> Для числа <strong>{{ key }}</strong> полученное значение равно <strong>{{ value }}</strong> </td>
+                                    </tr>
+
+                               {% endif %}
+                            {% endfor %}
+                        </table>
+                    </p>
+                </form>
+                
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-12">
+        <div class="hero-image" data-aos="fade-up" data-aos-delay="300">
+
+            <img src="../static/images/working-girl.png" class="img-fluid" alt="working girl">
+        </div>
+        </div>
+
+    </div>
+    
 {% endblock %}

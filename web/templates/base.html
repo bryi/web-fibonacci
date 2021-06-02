@@ -1,37 +1,131 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+  <script type = "text/JavaScript">
+    <!--
+       function AutoRefresh( t ) {
+          setTimeout("location.reload(true);", t);
+       }
+    //-->
+ </script>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+     <title>Числа фибоначчи</title>
+<!--
 
-    <title>{% block title %} {% endblock %}</title>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('index')}}">Home</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">About</a>
-            </li>
-            </ul>
+DIGITAL TREND
+
+https://templatemo.com/tm-538-digital-trend
+
+-->
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+     <meta name="description" content="">
+     <meta name="keywords" content="">
+     <meta name="author" content="">
+     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+     <link rel="stylesheet" href="../static/css/font-awesome.min.css">
+     <link rel="stylesheet" href="../static/css/aos.css">
+     <link rel="stylesheet" href="../static/css/owl.carousel.min.css">
+     <link rel="stylesheet" href="../static/css/owl.theme.default.min.css">
+
+     <!-- MAIN CSS -->
+     <link rel="stylesheet" href="../static/css/templatemo-digital-trend.css">
+
+</head>
+<body onload = "JavaScript:AutoRefresh(5000);">
+
+     <!-- MENU BAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+              Числа фибоначчи
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link contact">Home</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
-    <div class="container">
-        {% block content %} {% endblock %}
-    </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
+
+     <!-- HERO -->
+     <section class="hero hero-bg d-flex justify-content-center align-items-center">
+               <div class="container">
+                    {% block content %} {% endblock %}
+               </div>
+     </section>
+
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-5 mx-lg-auto col-md-8 col-10">
+            <h1 class="text-white" data-aos="fade-up" data-aos-delay="100">Числа <strong>фибоначчи</strong></h1>
+          </div>
+
+          <div class="col-lg-3 col-md-6 col-12" data-aos="fade-up" data-aos-delay="200">
+            <h4 class="my-4">Contact Info</h4>
+
+            <p class="mb-1">
+              <i class="fa fa-phone mr-2 footer-icon"></i> 
+              +99 080 070 4224
+            </p>
+
+            <p>
+              <a href="#">
+                <i class="fa fa-envelope mr-2 footer-icon"></i>
+                hello@company.com
+              </a>
+            </p>
+          </div>
+
+          <div class="col-lg-3 col-md-6 col-12" data-aos="fade-up" data-aos-delay="300">
+            <h4 class="my-4">Our Studio</h4>
+
+            <p class="mb-1">
+              <i class="fa fa-home mr-2 footer-icon"></i> 
+              Bryi
+            </p>
+          </div>
+
+          <div class="col-lg-4 mx-lg-auto text-center col-md-8 col-12" data-aos="fade-up" data-aos-delay="400">
+            <p class="copyright-text">Copyright &copy; 2021 Bryi
+            <br>
+            <a rel="nofollow noopener" href="https://templatemo.com">Design: TemplateMo</a></p>
+          </div>
+
+          <div class="col-lg-3 mx-lg-auto col-md-6 col-12" data-aos="fade-up" data-aos-delay="600">
+            <ul class="social-icon">
+              <li><a href="#" class="fa fa-instagram"></a></li>
+              <li><a href="#" class="fa fa-twitter"></a></li>
+              <li><a href="#" class="fa fa-dribbble"></a></li>
+              <li><a href="#" class="fa fa-behance"></a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </footer>
+
+
+     <!-- SCRIPTS -->
+     <script src="../static/js/jquery.min.js"></script>
+     <script src="../static/js/bootstrap.min.js"></script>
+     <script src="../static/js/aos.js"></script>
+     <script src="../static/js/owl.carousel.min.js"></script>
+     <script src="../static/js/smoothscroll.js"></script>
+     <script src="../static/js/custom.js"></script>
+
+</body>
 </html>
