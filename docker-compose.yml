@@ -4,6 +4,8 @@ services:
     api:
         container_name: api
         image: bryi/api
+        ports:
+            - "5000:5000"
         build:
             context: api/
         depends_on:
@@ -38,8 +40,8 @@ services:
             - "6379:6379"
         depends_on:
             - postgres
-        volumes:
-            - redis_data:/data
+        #volumes:
+        #    - redis_data:/data
             #- /tmp/redis.conf:/usr/local/etc/redis/redis.conf
         environment:
             - REDIS_REPLICATION_MODE=master
@@ -65,6 +67,24 @@ services:
         image: bryi/worker
         depends_on:
             - redis
+        environment:
+            - REDIS_SERVER=redis
+            - PATH=/home/worker/.local/bin:$PATH
+
+    rq-worker_2:
+        container_name: rq-worker_2
+        image: bryi/worker
+        depends_on:
+            - rq-worker
+        environment:
+            - REDIS_SERVER=redis
+            - PATH=/home/worker/.local/bin:$PATH
+
+    rq-worker_3:
+        container_name: rq-worker_3
+        image: bryi/worker
+        depends_on:
+            - rq-worker
         environment:
             - REDIS_SERVER=redis
             - PATH=/home/worker/.local/bin:$PATH

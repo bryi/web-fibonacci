@@ -48,41 +48,59 @@ class fibo_db(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     request = db.Column(db.Integer())
     result = db.Column(db.Integer())
-    job_id = db.Column(db.String())
 
-    def __init__(self, request, result, job_id):
+    def __init__(self, request, result):
         self.request = request
         self.result = result
-        self.job_id = job_id
 
 results_dict = {}
 temp_dict = {}
 di = {}
+
+def get_from_cache(x):
+    job_id = results_dict[int(x)]
+    try:
+        res_call = Job.fetch(f'{job_id}', connection=redis_conn)
+        if res_call.result is not None:
+            res = int(res_call.result)
+            return res
+    except:
+        pass
+
+def background(di):
+    for key in di:
+        result = get_from_cache(key)
+        if result is not None:
+            di[key] = result
+            exist = fibo_db.query.filter_by(request=key).first()
+            if not exist:
+                new_fibo = fibo_db(request=int(key),result=int(result))
+                db.session.add(new_fibo)
+                db.session.commit()
+
 @app.route("/", methods=['post', 'get'])
 def send_fibo():
     x = 0
+    background(di)
     try:
         x = int(request.args['x'])
-        job_id = results_dict[x]
-        res_call = Job.fetch(f'{job_id}', connection=redis_conn)
-        res = int(res_call.result)
+        res_get = get_from_cache(x)
+        if res_get is not None:
+            res = res_get
     except:
         result = q.enqueue(fibo, x, result_ttl=60)
         job_id = result.id
-        while True:
-            if result.result is not None:
-                res = int(result.result)
-                break
+        res = 'Запрос помещен в очередь'
         temp_dict[x]=result.id
         results_dict.update(temp_dict)
-        new_fibo = fibo_db(request=x,result=res,job_id=str(job_id))
         try:
-            db.session.add(new_fibo)
-            db.session.commit()
+            di[x] = res
         except:
-            print('Cannot save result to database!', file=sys.stderr)
-    di[x] = res
-    return str(res)
+            pass
+    try:
+        return str(res)
+    except:
+        return 'Error!'
 
 @app.route("/dict", methods=['post', 'get'])
 def send_dict():
