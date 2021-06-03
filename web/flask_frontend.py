@@ -6,13 +6,12 @@ app = Flask(__name__)
 
 @app.route("/", methods=['post', 'get'])
 def index():
-    if request.method == 'GET' or request.method == 'POST':
-	    x = str(request.form.get('x'))  # запрос к данным формы
-    try:
+    if request.method == 'POST':
+        x = str(request.form.get('x'))  # запрос к данным формы
         a = requests.get('http://api:5000/?x={}'.format(x))
+    try:
         dictin = requests.get('http://api:5000/dict')
         di = dictin.json()
-
     except:
         di = {}
     return render_template('index.html', variable3=di)

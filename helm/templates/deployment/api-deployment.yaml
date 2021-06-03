@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.api.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.api.replicas }}
+  selector:
+    matchLabels:
+      component: {{ .Values.api.name }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.api.name }}
+    spec:
+      containers:
+        - name: {{ .Values.api.name }}
+          image: {{ .Values.api.image }}
+          resources:
+            limits:
+              cpu: 300m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          ports:
+            - containerPort: {{ .Values.api.containerPort }}
+          env:
+          - name: POSTGRES_URL
+            value: {{ .Values.env.POSTGRES_URL }}
+          - name: POSTGRES_USER
+            value: {{ .Values.env.POSTGRES_USER }}
+          - name: POSTGRES_PW
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.env.POSTGRES_PW }}
+                key: password
+          - name: POSTGRES_DB
+            value: {{ .Values.env.POSTGRES_DB }}
+          - name: REDIS_SERVER
+            value: {{ .Values.env.REDIS_SERVER }}
+         

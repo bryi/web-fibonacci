@@ -3,7 +3,7 @@ services:
 
     api:
         container_name: api
-        image: bryi/api
+        image: bryi/api:v2
         ports:
             - "5000:5000"
         build:
@@ -48,7 +48,7 @@ services:
           
     frontend:
         container_name: frontend
-        image: bryi/frontend
+        image: bryi/frontend:v2
         build:
             context: web/
         ports:
@@ -64,7 +64,7 @@ services:
         build:
             context: api/
             dockerfile: Dockerfile_worker
-        image: bryi/worker
+        image: bryi/worker:v2
         depends_on:
             - redis
         environment:
@@ -73,7 +73,7 @@ services:
 
     rq-worker_2:
         container_name: rq-worker_2
-        image: bryi/worker
+        image: bryi/worker:v2
         depends_on:
             - rq-worker
         environment:
@@ -82,7 +82,7 @@ services:
 
     rq-worker_3:
         container_name: rq-worker_3
-        image: bryi/worker
+        image: bryi/worker:v2
         depends_on:
             - rq-worker
         environment:

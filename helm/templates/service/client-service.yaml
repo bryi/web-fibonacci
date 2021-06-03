@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.frontend.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.frontend.targetPort }}
+      targetPort: {{ .Values.frontend.containerPort }}
+      #nodePort: 31515
+  selector:
+    component: {{ .Values.frontend.name }}

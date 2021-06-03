@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.worker.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.worker.replicas }}
+  selector:
+    matchLabels:
+      component: {{ .Values.worker.name }}
+  template:
+    metadata:
+      labels:
+        component: {{ .Values.worker.name }}
+    spec:
+      containers:
+        - name: {{ .Values.worker.name }}
+          image: {{ .Values.worker.image }}
+          resources:
+            limits:
+              cpu: 300m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          env:
+          - name: PATH
+            value: {{ .Values.env.PATH }}
+          - name: REDIS_SERVER
+            value: {{ .Values.env.REDIS_SERVER }}
+         

@@ -1,0 +1,25 @@
+version: 'latest'
+namespace: web-fibonacci
+app_name: web-fibonacci
+env:
+  POSTGRES_URL: 192.168.56.114:5432
+  POSTGRES_USER: ctm
+  POSTGRES_PW: ctmpassword
+  POSTGRES_DB: app_redis
+  REDIS_SERVER: 192.168.56.114
+  PATH: /home/worker/.local/bin:$PATH
+api:
+  name: api
+  image: bryi/api:v2
+  replicas: 1
+  containerPort: 5000
+frontend:
+  name: web
+  image: bryi/frontend:v2
+  replicas: 1
+  containerPort: 5001
+  targetPort: 80
+worker:
+  name: worker
+  image: bryi/worker:v2
+  replicas: 3

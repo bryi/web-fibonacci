@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 import redis
 from rq import Queue
 from rq.job import Job
@@ -67,7 +67,30 @@ def get_from_cache(x):
     except:
         pass
 
-def background(di):
+def enqueue(x):
+    result = q.enqueue(fibo, x, result_ttl=300)
+    job_id = result.id
+    res = 'Запрос помещен в очередь'
+    temp_dict[x]=result.id
+    results_dict.update(temp_dict)
+    di[x] = res
+    return res
+
+@app.route("/", methods=['post', 'get'])
+def send_fibo():
+    try:
+        x = int(request.args['x'])
+        res = get_from_cache(x)
+        if res is None:
+            if results_dict[int(x)]:
+                del results_dict[x]
+            res = enqueue(x)
+    except:
+        res = enqueue(x)
+    return str(res)
+
+@app.route("/dict", methods=['post', 'get'])
+def send_dict():
     for key in di:
         result = get_from_cache(key)
         if result is not None:
@@ -77,31 +100,9 @@ def background(di):
                 new_fibo = fibo_db(request=int(key),result=int(result))
                 db.session.add(new_fibo)
                 db.session.commit()
-
-@app.route("/", methods=['post', 'get'])
-def send_fibo():
-    #x = 0
-    background(di)
-    try:
-        x = int(request.args['x'])
-        res_get = get_from_cache(x)
-        if res_get is not None:
-            res = res_get
-    except:
-        result = q.enqueue(fibo, x, result_ttl=60)
-        job_id = result.id
-        res = 'Запрос помещен в очередь'
-        temp_dict[x]=result.id
-        results_dict.update(temp_dict)
-        try:
-            di[x] = res
-        except:
-            pass
-    try:
-        return str(res)
-    except:
-        return 'Error!'
-
-@app.route("/dict", methods=['post', 'get'])
-def send_dict():
     return di
+
+@app.route("/health", methods=['post', 'get'])
+def send_health():
+    status_code = Response(status=200)
+    return status_code
