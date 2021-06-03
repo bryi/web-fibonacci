@@ -348,7 +348,7 @@ https://templatemo.com/tm-538-digital-trend
   }
 
   .hero-bg {
-    background: linear-gradient(var(--menu-bg), var(--primary-color));
+    background: linear-gradient(var(--primary-color), var(--dark-color));
   }
 
   .hero-image {
