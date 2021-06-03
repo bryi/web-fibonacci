@@ -104,5 +104,5 @@ def send_dict():
 
 @app.route("/health", methods=['post', 'get'])
 def send_health():
-    status_code = Response(status=200)
+    status_code = Response(status=200, response='OK!')
     return status_code

@@ -16,6 +16,18 @@ spec:
       containers:
         - name: {{ .Values.api.name }}
           image: {{ .Values.api.image }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.api.containerPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.api.containerPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 3
           resources:
             limits:
               cpu: 300m

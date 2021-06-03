@@ -16,6 +16,18 @@ spec:
       containers:
         - name: {{ .Values.frontend.name }}
           image: {{ .Values.frontend.image }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.frontend.containerPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.frontend.containerPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 3
           resources:
             limits:
               cpu: 300m
