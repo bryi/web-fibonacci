@@ -1,14 +1,16 @@
 #!/bin/bash
 while true;
-END=20
+END=40
 do
 for i in $(shuf -i 1-$END -n 1)
 do 
-result=`curl -s 192.168.49.2/api/?x=$i`;
+result=`curl -s localhost:5000/?x=$i`;
+#dict=`curl -s localhost:5000/dict`;
 echo $result
 if [ "$result" == "None" ]; then
 break
 fi;
-sleep 1
+#echo $dict
+#sleep 1
 done
 done

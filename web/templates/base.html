@@ -9,9 +9,9 @@
             $('#dict').empty();
             for (const [key, value] of Object.entries(data)) {
               if (value === 'Запрос помещен в очередь'){
-                $('#dict').append("<tr><td class='text-white' data-aos='fade-up' data-aos-delay='100'>Для числа <b>"+key+"</b> <b>"+value+"</b></td></tr>");
+                $('#dict').append("<tr><td class='text-white'>Для числа <b>"+key+"</b> <b>"+value+"</b></td></tr>");
               } else {
-                $('#dict').append("<tr><td class='text-white' data-aos='fade-up' data-aos-delay='100'>Для числа <b>"+key+"</b> значение равно <b>"+value+"</b></td></tr>");
+                $('#dict').append("<tr><td class='text-white'>Для числа <b>"+key+"</b> значение равно <b>"+value+"</b></td></tr>");
               }
           }
             funcTime = setTimeout(gavno, 1000)

@@ -39,7 +39,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation w
 app.config['DEBUG'] = False
 
 redis_conn = redis.Redis(host=REDIS_SERVER, port=6379)
-q = Queue(connection=redis_conn)
+q = Queue(connection=redis_conn, default_timeout=3600)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -65,7 +65,14 @@ def get_from_cache(x):
         res_call = Job.fetch(f'{job_id}', connection=redis_conn)
         if res_call.result is not None:
             res = int(res_call.result)
-            return res
+            exist = fibo_db.query.filter_by(request=int(x)).first()
+            if not exist:
+                new_fibo = fibo_db(request=int(x),result=res)
+                db.session.add(new_fibo)
+                db.session.commit()
+        elif res_call.id == job_id:
+            res = 'Запрос находится в обработке'
+        return res
     except:
         pass
 
@@ -93,15 +100,11 @@ def send_fibo():
 
 @app.route("/dict", methods=['post', 'get'])
 def send_dict():
-    for key in di:
+    for key in results_dict:
         result = get_from_cache(key)
-        if result is not None:
-            di[key] = result
-            exist = fibo_db.query.filter_by(request=key).first()
-            if not exist:
-                new_fibo = fibo_db(request=int(key),result=int(result))
-                db.session.add(new_fibo)
-                db.session.commit()
+    db_items = fibo_db.query.all()
+    for item in db_items:
+        di[item.request] = item.result
     return di
 
 @app.route("/health", methods=['post', 'get'])
