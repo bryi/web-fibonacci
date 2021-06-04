@@ -49,7 +49,7 @@ class fibo_db(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     request = db.Column(db.Integer())
-    result = db.Column(db.Integer())
+    result = db.Column(db.Text())
 
     def __init__(self, request, result):
         self.request = request
@@ -66,10 +66,8 @@ def get_from_cache(x):
         if res_call.result is not None:
             res = int(res_call.result)
             exist = fibo_db.query.filter_by(request=int(x)).first()
-            if not exist:
-                new_fibo = fibo_db(request=int(x),result=res)
-                db.session.add(new_fibo)
-                db.session.commit()
+            exist.result = res
+            db.session.commit()   
         elif res_call.id == job_id:
             res = 'Запрос находится в обработке'
         return res
@@ -82,7 +80,9 @@ def enqueue(x):
     res = 'Запрос помещен в очередь'
     temp_dict[x]=result.id
     results_dict.update(temp_dict)
-    di[x] = res
+    new_fibo = fibo_db(request=int(x),result=res)
+    db.session.add(new_fibo)
+    db.session.commit()
     return res
 
 @app.route("/", methods=['post', 'get'])

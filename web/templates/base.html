@@ -5,7 +5,7 @@
   <script type = "text/javascript">
     var funcTime
     function gavno(){
-        $.get( "http://192.168.56.114:5000/dict", function( data ) {
+        $.get( "http://192.168.56.114:5003/dict", function( data ) {
             $('#dict').empty();
             for (const [key, value] of Object.entries(data)) {
               if (value === 'Запрос помещен в очередь'){
