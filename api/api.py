@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, make_response
 import redis
 from rq import Queue
 from rq.job import Job
@@ -7,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
 import sys
+from flask_cors import CORS
 
 def fibo(x: int):
     if x == 0:
@@ -30,6 +31,7 @@ POSTGRES_DB = get_env_variable("POSTGRES_DB")
 REDIS_SERVER = get_env_variable("REDIS_SERVER")
 
 app = Flask(__name__)
+CORS(app)
 DB_URL = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL

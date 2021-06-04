@@ -9,9 +9,10 @@ def index():
     if request.method == 'POST':
         x = str(request.form.get('x'))  # запрос к данным формы
         a = requests.get('http://api:5000/?x={}'.format(x))
-    try:
-        dictin = requests.get('http://api:5000/dict')
-        di = dictin.json()
-    except:
-        di = {}
-    return render_template('index.html', variable3=di)
+    #try:
+    #    dictin = requests.get('http://api:5000/dict')
+    #    di = dictin.json()
+    #except:
+    #    di = {}
+    #return render_template('index.html', variable3=di)
+    return render_template('index.html')

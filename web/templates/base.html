@@ -1,13 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script type = "text/JavaScript">
-    <!--
-       function AutoRefresh( t ) {
-          setTimeout("location.reload(true);", t);
-       }
-    //-->
- </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type = "text/javascript">
+    var funcTime
+    function gavno(){
+        $.get( "http://192.168.56.114:5000/dict", function( data ) {
+            $('#dict').empty();
+            for (const [key, value] of Object.entries(data)) {
+              if (value === 'Запрос помещен в очередь'){
+                $('#dict').append("<tr><td class='text-white' data-aos='fade-up' data-aos-delay='100'>Для числа <b>"+key+"</b> <b>"+value+"</b></td></tr>");
+              } else {
+                $('#dict').append("<tr><td class='text-white' data-aos='fade-up' data-aos-delay='100'>Для числа <b>"+key+"</b> значение равно <b>"+value+"</b></td></tr>");
+              }
+          }
+            funcTime = setTimeout(gavno, 1000)
+            //$('#x').val(data)
+        });
+    }
+    function stopFunction(){
+        clearTimeout(funcTime); // stop the timer
+    }
+    $(document).ready(function(){
+        gavno();
+    });
+
+</script>
 
      <title>Числа фибоначчи</title>
 <!--
@@ -34,7 +52,7 @@ https://templatemo.com/tm-538-digital-trend
      <link rel="stylesheet" href="../static/css/templatemo-digital-trend.css">
 
 </head>
-<body onload = "JavaScript:AutoRefresh(5000);">
+<body>
 
      <!-- MENU BAR -->
     <nav class="navbar navbar-expand-lg">
