@@ -6,8 +6,8 @@ services:
         image: bryi/api:v3
         ports:
             - "5000:5000"
-        build:
-            context: api/
+        #build:
+        #    context: api/
         environment:
             - PATH=/home/worker/.local/bin:$PATH
             - POSTGRES_URL=10.0.0.114:5432
@@ -20,8 +20,8 @@ services:
     frontend:
         container_name: frontend
         image: bryi/frontend:v3
-        build:
-            context: web/
+        #build:
+        #    context: web/
         ports:
             - "80:5001"
         depends_on:
@@ -32,11 +32,82 @@ services:
     
     rq-worker:
         container_name: rq-worker
-        build:
-            context: api/
-            dockerfile: Dockerfile_worker
+        #build:
+        #    context: api/
+        #    dockerfile: Dockerfile_worker
+        depends_on:
+            - api
         image: bryi/worker:v3
         environment:
             - REDIS_SERVER=10.0.0.114
             - PATH=/home/worker/.local/bin:$PATH
-    
+            - POSTGRES_URL=10.0.0.114:5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PW=
+            - POSTGRES_DB=app_redis
+
+    rq-worker_2:
+        container_name: rq-worker_2
+        image: bryi/worker:v3
+        depends_on:
+            - rq-worker
+        environment:
+            - REDIS_SERVER=10.0.0.114
+            - PATH=/home/worker/.local/bin:$PATH
+            - POSTGRES_URL=10.0.0.114:5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PW=
+            - POSTGRES_DB=app_redis
+
+    rq-worker_3:
+        container_name: rq-worker_3
+        image: bryi/worker:v3
+        depends_on:
+            - rq-worker
+        environment:
+            - REDIS_SERVER=10.0.0.114
+            - PATH=/home/worker/.local/bin:$PATH
+            - POSTGRES_URL=10.0.0.114:5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PW=
+            - POSTGRES_DB=app_redis
+
+    rq-worker_4:
+        container_name: rq-worker_4
+        image: bryi/worker:v3
+        depends_on:
+            - rq-worker
+        environment:
+            - REDIS_SERVER=10.0.0.114
+            - PATH=/home/worker/.local/bin:$PATH
+            - POSTGRES_URL=10.0.0.114:5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PW=
+            - POSTGRES_DB=app_redis
+
+    rq-worker_5:
+        container_name: rq-worker_5
+        image: bryi/worker:v3
+        depends_on:
+            - rq-worker
+        environment:
+            - REDIS_SERVER=10.0.0.114
+            - PATH=/home/worker/.local/bin:$PATH
+            - POSTGRES_URL=10.0.0.114:5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PW=
+            - POSTGRES_DB=app_redis
+        
+    rq-worker_6:
+        container_name: rq-worker_6
+        image: bryi/worker:v3
+        depends_on:
+            - rq-worker
+        environment:
+            - REDIS_SERVER=10.0.0.114
+            - PATH=/home/worker/.local/bin:$PATH
+            - POSTGRES_URL=10.0.0.114:5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PW=
+            - POSTGRES_DB=app_redis
+

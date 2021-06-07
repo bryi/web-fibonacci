@@ -8,5 +8,5 @@ app = Flask(__name__)
 def index():
     if request.method == 'POST':
         x = str(request.form.get('x'))  # запрос к данным формы
-        a = requests.get('http://api:5000/?x={}'.format(x))
+        a = requests.get('http://api:5000/fib/?x={}'.format(x))
     return render_template('index.html')
