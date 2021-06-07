@@ -1,6 +1,6 @@
 #!/bin/bash
 while true;
-END=30
+END=40
 do
 for i in $(shuf -i 1-$END -n 1)
 do 

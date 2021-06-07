@@ -105,6 +105,12 @@ def send_fibo():
         x = int(request.args['x'])
         res = get_from_cache(x)
         if res is None:
+            exist = fibo_db.query.filter_by(request=int(x)).first()
+            while True:
+                if exist is not None:
+                    break
+            db.session.delete(exist)
+            db.session.commit()
             res = enqueue(x)
     except:
         res = enqueue(x)
