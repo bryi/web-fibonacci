@@ -20,8 +20,8 @@ services:
     frontend:
         container_name: frontend
         image: bryi/frontend:v3
-        #build:
-        #    context: web/
+        build:
+            context: web/
         ports:
             - "80:5001"
         depends_on:
@@ -32,9 +32,9 @@ services:
     
     rq-worker:
         container_name: rq-worker
-        #build:
-        #    context: api/
-        #    dockerfile: Dockerfile_worker
+        build:
+            context: api/
+            dockerfile: Dockerfile_worker
         depends_on:
             - api
         image: bryi/worker:v3

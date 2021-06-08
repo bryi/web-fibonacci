@@ -88,10 +88,12 @@ def get_from_cache(x):
                 res = int(res_call.result)
             elif res_call.result is None and res_call.id == job_id:
                 res = 'Запрос находится в обработке'
+        else:
+            res = None
     return res
 
 def enqueue(x):
-    result = q.enqueue(calc_and_write_to_db, x, result_ttl=300)
+    result = q.enqueue(calc_and_write_to_db, x, result_ttl=3600)
     job_id = result.id
     res = 'Запрос помещен в очередь'
     new_fibo = fibo_db(request=int(x),result=res, job_id=str(job_id))
@@ -101,18 +103,16 @@ def enqueue(x):
 
 @app.route("/fib/", methods=['post', 'get'])
 def send_fibo():
-    try:
-        x = int(request.args['x'])
-        res = get_from_cache(x)
-        if res is None:
-            exist = fibo_db.query.filter_by(request=int(x)).first()
+    x = int(request.args['x'])
+    res = get_from_cache(x)
+    if res is None:
+        exist = fibo_db.query.filter_by(request=int(x)).first()
+        if exist:
             while True:
                 if exist is not None:
                     break
             db.session.delete(exist)
             db.session.commit()
-            res = enqueue(x)
-    except:
         res = enqueue(x)
     return str(res)
 
