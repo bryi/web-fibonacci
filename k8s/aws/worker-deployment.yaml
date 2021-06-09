@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: worker
 spec:
-  replicas: 3
+  replicas: 6
   selector:
     matchLabels:
       component: worker
@@ -23,10 +23,28 @@ spec:
                 - "true"
       containers:
         - name: worker
-          image: bryi/worker
+          image: bryi/worker:v3
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
           env:
           - name: PATH
             value: "/home/worker/.local/bin:$PATH"
           - name: REDIS_SERVER
             value: "redis.ugjdtw.ng.0001.use1.cache.amazonaws.com"
+          - name: POSTGRES_URL
+            value: "rds-eksworkshop.cmsyxompjlqg.us-east-1.rds.amazonaws.com:5432"
+          - name: POSTGRES_USER
+            value: "ctm"
+          - name: POSTGRES_PW
+            valueFrom:
+              secretKeyRef:
+                name: ctmpassword
+                key: password
+          - name: POSTGRES_DB
+            value: "app_redis"
          

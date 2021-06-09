@@ -4,10 +4,11 @@ metadata:
   name: ingress-service
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-    - http:
+    - host: bryidomain.tk
+      http:
         paths:
           - path: /
             pathType: Prefix
@@ -16,7 +17,10 @@ spec:
                 name: frontend
                 port: 
                   number: 80
-          - path: /api
+    - host: api.bryidomain.tk
+      http:
+        paths:
+          - path: /
             pathType: Prefix
             backend:
               service:

@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.frontend.name }}
   namespace: {{ .Values.namespace }}
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - port: {{ .Values.frontend.targetPort }}
       targetPort: {{ .Values.frontend.containerPort }}

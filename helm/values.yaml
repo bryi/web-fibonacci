@@ -1,12 +1,13 @@
 version: 'latest'
 namespace: web-fibonacci
 app_name: web-fibonacci
+enable_ingress: false
 env:
-  POSTGRES_URL: 10.0.0.114:5432
-  POSTGRES_USER: postgres
+  POSTGRES_URL: rds-eksworkshop.cmsyxompjlqg.us-east-1.rds.amazonaws.com:5432
+  POSTGRES_USER: ctm
   POSTGRES_PW: ctmpassword
   POSTGRES_DB: app_redis
-  REDIS_SERVER: 10.0.0.114
+  REDIS_SERVER: redis.ugjdtw.ng.0001.use1.cache.amazonaws.com
   PATH: /home/worker/.local/bin:$PATH
 api:
   name: api

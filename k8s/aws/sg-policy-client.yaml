@@ -1,12 +1,11 @@
 apiVersion: vpcresources.k8s.aws/v1beta1
 kind: SecurityGroupPolicy
 metadata:
-  name: allow-worker-access
+  name: allow-client-access
 spec:
   podSelector:
     matchLabels:
       component: web
   securityGroups:
     groupIds:
-      - sg-0f207ef62d86d806e
-      - sg-070b67637ab9fbb92
+      - sg-0022f825c5674e621

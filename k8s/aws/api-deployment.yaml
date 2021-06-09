@@ -23,18 +23,25 @@ spec:
                 - "true"
       containers:
         - name: api
-          image: bryi/api
+          image: bryi/api:v3
           ports:
             - containerPort: 5000
+          resources:
+            limits:
+              cpu: 300m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
           env:
           - name: POSTGRES_URL
             value: "rds-eksworkshop.cmsyxompjlqg.us-east-1.rds.amazonaws.com:5432"
           - name: POSTGRES_USER
-            value: "eksworkshop"
+            value: "ctm"
           - name: POSTGRES_PW
             valueFrom:
               secretKeyRef:
-                name: postgrespass
+                name: ctmpassword
                 key: password
           - name: POSTGRES_DB
             value: "app_redis"
