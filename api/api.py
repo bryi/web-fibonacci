@@ -21,13 +21,10 @@ def calc_and_write_to_db(x):
     result = q.enqueue(fibo, int(x), result_ttl=300)
     while True:
         if result.result is not None:
+            exist = fibo_db.query.filter_by(request=int(x)).first()
+            exist.result = int(result.result)
+            db.session.commit()
             break
-    exist = fibo_db.query.filter_by(request=int(x)).first()
-    while True:
-        if exist is not None:
-            break
-    exist.result = int(result.result)
-    db.session.commit()
     return int(result.result)
 
 def get_env_variable(name):
