@@ -18,12 +18,17 @@ def fibo(x: int):
         return fibo(x-1) + fibo(x-2)
 
 def calc_and_write_to_db(x):
-    result = q.enqueue(fibo, int(x), result_ttl=300)
+    result = q.enqueue(fibo, int(x), result_ttl=5)
     while True:
         if result.result is not None:
             exist = fibo_db.query.filter_by(request=int(x)).first()
-            exist.result = int(result.result)
-            db.session.commit()
+            if exist is not None:
+                exist.result = int(result.result)
+                db.session.commit()
+            else:
+                new_fibo = fibo_db(request=int(x),result=int(result.result), job_id=str(result.id))
+                db.session.add(new_fibo)
+                db.session.commit()
             break
     return int(result.result)
 
@@ -80,36 +85,43 @@ def get_from_cache(x):
         exist = fibo_db.query.filter_by(request=int(x)).first()
         if exist:
             job_id = exist.job_id
-            res_call = Job.fetch(f'{job_id}', connection=redis_conn)
-            if res_call.result is not None:
-                res = int(res_call.result)
-            elif res_call.result is None and res_call.id == job_id:
-                res = 'Запрос находится в обработке'
+            try:
+                res_call = Job.fetch(f'{job_id}', connection=redis_conn)
+                if res_call.result is not None:
+                    res = int(res_call.result)
+                elif res_call.result is None and res_call.id == job_id:
+                    res = 'Запрос находится в обработке'
+            except:
+                if exist.result == 'Запрос помещен в очередь':
+                    db.session.delete(exist)
+                    db.session.commit()
+                    res = None
+                else:
+                    res = exist.result
         else:
             res = None
     return res
 
 def enqueue(x):
-    result = q.enqueue(calc_and_write_to_db, x, result_ttl=3600)
+    result = q.enqueue(calc_and_write_to_db, x, result_ttl=60)
     job_id = result.id
     res = 'Запрос помещен в очередь'
-    new_fibo = fibo_db(request=int(x),result=res, job_id=str(job_id))
-    db.session.add(new_fibo)
-    db.session.commit()
+    exist = fibo_db.query.filter_by(request=int(x)).first()
+    if exist is not None:
+        exist.result = res
+        exist.job_id = job_id
+        db.session.commit()
+    else:
+        new_fibo = fibo_db(request=int(x),result=res, job_id=str(job_id))
+        db.session.add(new_fibo)
+        db.session.commit()
     return res
 
 @app.route("/fib/", methods=['post', 'get'])
 def send_fibo():
     x = int(request.args['x'])
     res = get_from_cache(x)
-    if res is None:
-        exist = fibo_db.query.filter_by(request=int(x)).first()
-        if exist:
-            while True:
-                if exist is not None:
-                    break
-            db.session.delete(exist)
-            db.session.commit()
+    if res is None:    
         res = enqueue(x)
     return str(res)
 
